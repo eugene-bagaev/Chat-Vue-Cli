@@ -30,7 +30,7 @@ export default {
   },
   data () {
     return {
-      state: 'login'
+      state: 'reg'
     }
   }
 }
