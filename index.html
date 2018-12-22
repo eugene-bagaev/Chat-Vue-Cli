@@ -1,10 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
+<style type="text/css">
+    .square {
+        height: 70px;
+        width: 70px;
+        border: 1px solid black;
+    }
+    .red{
+        background-color: red;
+    }
+    .blue{
+        background-color: blue;
+    }
+    .green{
+        background-color: green;
+    }
+</style>
 <head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Изучаем Vue.js</title>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-$END$
+
+<div id="app6">
+    <h2>Список пользователей</h2>
+    <userform :addfn="add"></userform>
+    <div>
+        <useritem v-for="(user, index) in users"
+                  :user="user"
+                  :key="index"
+                  :index="index"
+                  :removefn="remove">
+        </useritem>
+    </div>
+</div>
+<script src="https://unpkg.com/vue"></script>
+<script>
+    Vue.component('userform', {
+        props: ["addfn"],
+        data: function () {
+            return {
+                user: {name:'', age:18}
+            }
+        },
+        template: `<div>
+                    <input type="text" v-model="user.name" />
+                    <input type="number" v-model="user.age" />
+                    <button  v-on:click="addfn({name:user.name, age: user.age})">Add</button>
+                </div>`
+    });
+    Vue.component('useritem', {
+        props: ["user", "index", "removefn"],
+        template: `<div>
+                    <p>Name: {{user.name}} <br> Age: {{user.age}}</p>
+                    <button  v-on:click="removefn(index)">Delete</button>
+                </div>`
+    });
+    new Vue({
+        el: "#app6",
+        data: {
+            users:[
+                {name: 'Tom', age: 23},
+                {name: 'Bob', age: 26},
+                {name: 'Alice', age: 28}
+            ]
+        },
+        methods:{
+            remove: function(index){
+                this.users.splice(index, 1);
+            },
+            add: function(user){
+                this.users.push(user);
+            }
+        }
+    });
+</script>
+
+<hr/>
+
+<div id="app5">
+    <h2>Список пользователей</h2>
+    <userform :users="users"></userform>
+    <div>
+        <useritem v-for="(user, index) in users"
+                  :user="user"
+                  :index="index"
+                  :key="index"
+                  v-on:userdelete="remove">
+        </useritem>
+    </div>
+</div>
+<script src="https://unpkg.com/vue"></script>
+<script>
+    Vue.component('userform', {
+        props: ["users"],
+        data: function () {
+            return {
+                user: {name:'', age:18}
+            }
+        },
+        template: `<div>
+                    <input type="text" v-model="user.name" />
+                    <input type="number" v-model="user.age" />
+                    <button  v-on:click="userAdd">Add</button>
+                </div>`,
+        methods: {
+            userAdd: function(event){
+                this.users.push({name:this.user.name, age: this.user.age});
+            }
+        }
+    });
+    Vue.component('useritem', {
+        props: ["user", "index"],
+        template: `<div>
+                    <p>Name: {{user.name}} <br> Age: {{user.age}}</p>
+                    <button  v-on:click="userDelete(index)">Delete</button>
+                </div>`,
+        methods: {
+            userDelete: function(index){
+                this.$emit('userdelete', index);
+            }
+        }
+    });
+    new Vue({
+        el: "#app5",
+        data: {
+            users:[
+                {name: 'Tom', age: 23},
+                {name: 'Bob', age: 26},
+                {name: 'Alice', age: 28}
+            ]
+        },
+        methods:{
+            remove: function(index){
+                this.users.splice(index, 1)
+            }
+        }
+    });
+</script>
+<hr/>
+<div id="app4">
+    <p>Name is: {{ name }}</p>
+    <useredit :user.sync="name"></useredit>
+</div>
+<script type="text/javascript">
+    Vue.component('useredit', {
+        props: ['user'],
+        data: function() {
+            return {
+                userName: this.user
+            }
+        },
+        template: `<div><p><input type="text" v-model="userName" v-on:input="onUserChange"/></p><p>Name: {{userName}}</p></div>`,
+        methods: {
+            onUserChange: function() {
+                this.$emit('update.user', this.userName)
+            }
+        }
+    });
+    var appka = new Vue({
+        el: "#app4",
+        data: {
+            name: 'Eugene'
+        }
+
+    });
+</script>
+
+<br /><br />
+
+<div id="app3">
+    <input type="text" v-model="info">
+    <mycmp :name="info"></mycmp>
+
+</div>
+<script type="text/javascript">
+
+    var data = {
+        header: 'Common Values',
+        count: 1
+    };
+
+    Vue.component('mycmp', {
+        props: ['name'],
+        data: function() {
+            return data
+        },
+        template: `<div><p>{{ header }}</p>
+                    <p><button v-on:click="inc">{{ name }}</button></p>
+                    <p>{{ count }}</p>
+                    </div>`,
+        methods: {
+            inc: function() {
+                this.count++;
+            }
+        }
+    });
+
+    new Vue({
+        el: "#app3",
+        data: {
+            info: 'Change in input'
+        }
+    });
+
+</script>
+
+<br /><br />
+
+<div id="app2">
+    <p>
+        <input type="text" v-model="newPhone"/><button v-on:click="phones.push(newPhone)">Add Phone</button>
+    </p>
+    <p>
+        <ul>
+            <li v-for="(phone, index) in phones">
+    <p>{{phone}}<button v-on:click="phones.splice(index, 1)">Delete</button></p>
+    </li>
+    </ul>
+    </p>
+
+    <input type="checkbox" value="Tom" v-model="selectedUsers">
+    <label>C#</label><br>
+    <input type="checkbox" value="Bob" v-model="selectedUsers">
+    <label>Bob</label><br>
+    <input type="checkbox" value="Sam" v-model="selectedUsers">
+    <label>Sam</label><br>
+    <input type="checkbox" value="Alice" v-model="selectedUsers">
+    <label>Alice</label><br>
+    <span>Выбрано: {{selectedUsers}}</span>
+
+</div>
+
+<br /><br />
+
+<div id="app">
+    <input type="text" v-model="lastName"/>
+    <input type="text" v-model="firstName"/>
+    <input type="text" v-model="fullName"/>
+    <input type="text" v-model="age"/>
+
+    <p>{{ fullName }}</p>
+
+    <p>
+    <div class="square" v-bind:class="color"></div>
+    <input type="text" v-model="color"/>
+    </p>
+    <p>
+    <div class="square" v-bind:style="{'background-color': backColor, height: sqHeight + 'px', width: sqWidth + 'px'}"></div>
+    <input type="text" v-model="backColor"/>
+    <input type="text" v-model="sqHeight"/>
+    <input type="text" v-model="sqWidth"/>
+    </p>
+</div>
+
+
+<script>
+    var app2 = new Vue({
+        el: '#app2',
+        data : {
+            newPhone: '',
+            phones: ['7', '10', 'S8', 'i3'],
+            selectedUsers: []
+        }
+    });
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            lastName: 'Tom',
+            firstName: 'Bagaev',
+            age: 25,
+            color: "red",
+            backColor: "red",
+            sqHeight: 50,
+            sqWidth: 50
+        },
+        computed: {
+            fullName: {
+                get: function() {
+                    return this.lastName + ' ' + this.firstName;
+                },
+                set: function(newValue) {
+
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>

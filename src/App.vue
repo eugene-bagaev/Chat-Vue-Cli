@@ -1,28 +1,37 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+
+    <v-content v-if="state == 'chat'">
+        <Chat />
+    </v-content>
+
+    <v-content v-if="state == 'login'">
+        <Login />
+    </v-content>
+
+    <v-content v-if="state == 'reg'">
+        <Registration />
+    </v-content>
+
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Login from './components/LoginForm'
+import Chat from './components/Chat'
+import Registration from './components/Registration'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    HelloWorld
+        Login,
+        Chat,
+        Registration
+  },
+  data () {
+    return {
+      state: 'login'
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
