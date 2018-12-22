@@ -34,4 +34,5 @@ export default {
     }
   }
 }
+// state for displaying different components
 </script>
