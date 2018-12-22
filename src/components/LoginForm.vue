@@ -29,7 +29,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <!--<v-spacer></v-spacer>-->
-                                <v-checkbox label="Remember me" v-model="checkbox1"></v-checkbox>
+                                <v-checkbox label="Remember me" v-model="checkbox"></v-checkbox>
                                 <v-btn color="primary">Login</v-btn>
                             </v-card-actions>
                         </v-card>
@@ -41,15 +41,27 @@
 </template>
 
 <script>
+    var serverConnection = new WebSocket("ws://localhost:8080/chat");
+
+    serverConnection.onopen = function () {
+        console.log('Connection Success');
+        // initUser();
+    };
+
     export default {
-        components: {
-        },
+
         data: () => ({
             drawer: null,
-            checkbox1: true
+            checkbox: false
         }),
         props: {
             source: String
+        },
+        beforeCreate() {
+            console.log('Nothing gets called before me!')
+        },
+        beforeDestroy() {
+            serverConnection.close();
         }
     }
 </script>
