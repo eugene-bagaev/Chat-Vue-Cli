@@ -1,5 +1,5 @@
 <template>
-    <ChatContainer />
+    <ChatContainer v-on:logout="logout" />
 </template>
 
 <script>
@@ -9,7 +9,14 @@
         components: {
             ChatContainer
         },
-        name: "Chat"
+        name: "Chat",
+        methods: {
+            logout(value) {
+                if (value) {
+                    this.$emit('logout', value);
+                }
+            }
+        }
     }
 </script>
 

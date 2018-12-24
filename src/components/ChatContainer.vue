@@ -53,9 +53,19 @@
                                 <v-icon>apps</v-icon>
                             </v-btn>
 
-                            <v-btn icon>
-                                <v-icon>more_vert</v-icon>
-                            </v-btn>
+                            <v-tooltip bottom>
+                                <v-btn
+                                        slot="activator"
+                                        icon
+                                        @click="logout"
+                                        large
+                                        target="_blank"
+                                >
+                                    <v-icon >exit_to_app</v-icon>
+                                </v-btn>
+                                <span>Logout</span>
+                            </v-tooltip>
+
                         </v-toolbar>
 
                         <v-divider></v-divider>
@@ -96,8 +106,9 @@
         computed : {
         },
         methods: {
-            isMobileDevice() {
-
+            logout() {
+                this.$session.destroy();
+                this.$emit('logout', true);
             }
         }
 
