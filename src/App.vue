@@ -6,11 +6,15 @@
     </v-content>
 
     <v-content v-if="state == 'login'">
-        <Login v-on:login="loginSuccess" v-on:signup="signup" />
+        <Login v-on:login="loginSuccess" v-on:signup="signup" v-on:signin="signin" />
     </v-content>
 
     <v-content v-if="state == 'reg'">
-        <Registration />
+        <Registration v-on:signin="signin" v-on:login="loginSuccess" />
+    </v-content>
+
+    <v-content>
+        <WebSocket />
     </v-content>
 
   </v-app>
@@ -20,17 +24,19 @@
 import Login            from './components/LoginForm';
 import Chat             from './components/Chat';
 import Registration     from './components/Registration';
+import WebSocket        from './components/WebSocket';
 
 export default {
     name: 'App',
     components: {
+        WebSocket,
         Login,
         Chat,
         Registration
     },
     data () {
         return {
-            state: ''
+            state: 'login'
         }
     },
     methods: {
@@ -48,16 +54,15 @@ export default {
             if (value) {
                 this.state = 'reg'
             }
+        },
+        signin(value) {
+            if (value) {
+                this.state = 'login'
+            }
         }
     },
     beforeMount() {
-        if (this.$session.exists()) {
-            console.log('Session exist');
-            this.state = 'chat'
-        } else {
-            this.state = 'login'
-        }
+
     }
 }
-// state for displaying different components
 </script>
