@@ -135,7 +135,6 @@
                 this.$session.set('id',     serverData.id);
             },
             saveUserSessionData(serverData) {
-                console.log(serverData);
                 this.$session.start();
                 this.$session.set('user',   serverData.username);
                 this.$session.set('id',     serverData.id);
