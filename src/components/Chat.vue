@@ -1,9 +1,9 @@
 <template>
-    <ChatContainer v-on:logout="logout" />
+    <ChatContainer v-on:logout="logout"  />
 </template>
 
 <script>
-    import ChatContainer from '../components/ChatContainer'
+    import ChatContainer from '../components/ChatBody'
 
     export default {
         components: {

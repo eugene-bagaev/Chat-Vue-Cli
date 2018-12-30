@@ -1,5 +1,5 @@
 <template>
-    <v-app id="inspire">
+    <v-app id="inspire" v-if="displayBody">
         <v-content>
             <v-container fluid fill-height>
                 <v-layout align-center justify-center>
@@ -13,11 +13,10 @@
                                             slot="activator"
                                             @click="signup"
                                             color="primary"
-                                            target="_blank"
-                                    >
+                                            target="_blank">
                                         Sign up
                                     </v-btn>
-                                    <span>Sign up</span>
+                                    <span>Need an account? Sign up</span>
                                 </v-tooltip>
                             </v-toolbar>
                             <v-card-text>
@@ -40,9 +39,10 @@
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
-                                <!--<v-spacer></v-spacer>-->
+
                                 <v-checkbox label="Remember me" v-model="remember"></v-checkbox>
                                 <v-btn color="primary" @click="submit">Login</v-btn>
+
                             </v-card-actions>
                         </v-card>
                     </v-flex>
@@ -64,15 +64,8 @@
 </template>
 
 <script>
-    import Vue          from 'vue';
-    import WebSocket    from 'vue-native-websocket';
-    import VueSession   from 'vue-session';
-
-    Vue.use(WebSocket, "ws://localhost:8080/login");
-    Vue.use(VueSession);
-
     export default {
-
+        name: 'Login',
         data: () => ({
             login: '',
             password: '',
@@ -84,6 +77,7 @@
             popupMode: 'normal',
             drawer: null,
             remember: false,
+            displayBody: true,
             passwordRules: [
                 p => !!p || 'Password is required.',
                 p => !(p.length <= 2) || 'Password must be longer than 2 characters.'
@@ -102,10 +96,14 @@
                 if (this.$refs.form.validate()) {
                     let loginInfo = {
                         login       : this.login,
-                        password    : this.password,
-                        remember    : this.remember
+                        password    : this.password
                     };
-                    this.$socket.send(JSON.stringify(loginInfo))
+                     let serverData = {
+                         type : 'login',
+                         data : JSON.stringify(loginInfo)
+                     };
+
+                    this.$socket.send(JSON.stringify(serverData));
                 } else {
                     this.showToast('Please check the entered data in the form', 'error');
                 }
@@ -118,24 +116,29 @@
                 }
             },
             loginSuccess(serverData) {
-                console.log(serverData);
                 this.showToast(serverData.status, 'success');
-                if (this.remember) { this.startSession(serverData); }
+                this.remember ? this.startSession(serverData) : this.saveUserSessionData(serverData);
                 setTimeout(() => this.$emit('login', true), 1500);
             },
             loginUserError(serverData) {
                 this.showToast(serverData.status, 'error');
             },
             showToast(text, color) {
-                this.popupText = text;
-                this.popupColor = color
-                this.popupVisible = true;
+                this.popupText      = text;
+                this.popupColor     = color;
+                this.popupVisible   = true;
             },
             startSession(serverData) {
-                console.log('Start Session');
                 this.$session.start();
-                this.$session.set('token', serverData.key);
-                this.$session.set('user', serverData.username);
+                this.$session.set('token',  serverData.key);
+                this.$session.set('user',   serverData.username);
+                this.$session.set('id',     serverData.id);
+            },
+            saveUserSessionData(serverData) {
+                console.log(serverData);
+                this.$session.start();
+                this.$session.set('user',   serverData.username);
+                this.$session.set('id',     serverData.id);
             },
             signup() {
                 this.$emit('signup', true);
@@ -145,10 +148,17 @@
             this.$options.sockets.onmessage = function (data) {
                 this.loginLogic(JSON.parse(data.data));
             }
-        }
+        },
+        beforeMount() {
+            if (this.$session.exists()) {
+                this.displayBody = false;
+                setTimeout(() => this.$emit('login', true), 0);
+            } else {
+                this.$emit('signin', true);
+            }
+        },
     }
 </script>
 
 <style scoped>
-
 </style>
