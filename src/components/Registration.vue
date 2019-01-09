@@ -185,7 +185,6 @@
                 }
             },
             loginUserAfterRegistration() {
-                this.$session.start();
                 this.$emit('login', true);
             },
             registrationError(serverData) {
