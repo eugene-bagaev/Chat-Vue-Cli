@@ -33,6 +33,7 @@
                                                   v-model="password"
                                                   name="password"
                                                   required
+                                                  @keyup.enter="submit"
                                                   :rules="passwordRules"
                                                   label="Password"
                                                   type="password"></v-text-field>
@@ -129,15 +130,13 @@
                 this.popupVisible   = true;
             },
             startSession(serverData) {
-                this.$session.start();
-                this.$session.set('token',  serverData.key);
-                this.$session.set('user',   serverData.username);
-                this.$session.set('id',     serverData.id);
+                this.$cookies.set('token',  serverData.key);
+                this.$cookies.set('user',   serverData.username);
+                this.$cookies.set('id',     serverData.id);
             },
             saveUserSessionData(serverData) {
-                this.$session.start();
-                this.$session.set('user',   serverData.username);
-                this.$session.set('id',     serverData.id);
+                this.$cookies.set('user',   serverData.username);
+                this.$cookies.set('id',     serverData.id);
             },
             signup() {
                 this.$emit('signup', true);
@@ -149,7 +148,7 @@
             }
         },
         beforeMount() {
-            if (this.$session.exists()) {
+            if (this.$cookies.isKey('token')) {
                 this.displayBody = false;
                 setTimeout(() => this.$emit('login', true), 0);
             } else {

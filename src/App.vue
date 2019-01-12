@@ -61,8 +61,6 @@ export default {
             }
         }
     },
-    beforeMount() {
-
-    }
+    beforeCreate() { }
 }
 </script>
