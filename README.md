@@ -1,29 +1,15 @@
-# untitled
+# VueJS Chat CLient
 
-## Project setup
-```
-npm install
-```
+Настройка проекта в Visual Studio Code
+1. Открываем терминал или командную строку в нужно директории
+2. Делаем git clone <link to project> <project/folder name>
+3. Открываем папку, которая была создана после клонирования
+4. Пишем npm install в терминале VS Code
+5. Пишем npm run serve  для запуска девелопер сервера
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Настройка проекта в Intellij IDEA
+1. Создаем новый проект с помощью Checkout from VSC
+2. Отсавляем все по умолчанию, когда IDE начнем спрашивать параметры
+3. После открытия проекта выполняем команду npm run serve
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
