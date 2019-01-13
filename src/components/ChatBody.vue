@@ -9,21 +9,42 @@
                 enable-resize-watcher
                 fixed
                 app>
-            <v-list>
-                <v-list-tile
-                        value="true"
-                        v-for="(item, i) in users"
-                        :key="i">
+            <v-list two-line subheader>
 
-                    <v-list-tile-action>
-                        <v-icon v-html="icon"></v-icon>
-                    </v-list-tile-action>
+                <v-subheader inset>
+                    Online users
+                </v-subheader>
+
+                <v-list-tile
+                    v-for="item in users"
+                    :key="item.title"
+                    avatar
+                    @click=""
+                >
+                    <v-list-tile-avatar>
+                        <v-icon :class="tempAvatarClass">
+                            {{ tempAvatar }}
+                        </v-icon>
+                    </v-list-tile-avatar>
 
                     <v-list-tile-content>
-                        <v-list-tile-title v-text="item.name">{{item.username}}</v-list-tile-title>
+                        <v-list-tile-title>{{ item.username }}</v-list-tile-title>
+                        <v-list-tile-sub-title>{{ item.name }}</v-list-tile-sub-title>
                     </v-list-tile-content>
 
+                    <v-list-tile-action>
+                    <v-btn
+                        icon
+                        ripple
+                    >
+                        <v-icon color="grey lighten-1">
+                        info
+                        </v-icon>
+                    </v-btn>
+                    </v-list-tile-action>
                 </v-list-tile>
+
+
             </v-list>
         </v-navigation-drawer>
 
@@ -71,8 +92,8 @@
                     </v-layout>
                 </v-img>
 
-                <v-list two-line>
-                    <v-list-tile @click="">
+                <v-list two-line subheader>
+                    <v-list-tile>
                         <v-list-tile-action>
                             <v-icon color="indigo">phone</v-icon>
                         </v-list-tile-action>
@@ -87,7 +108,7 @@
                         </v-list-tile-action>
                     </v-list-tile>
 
-                    <v-list-tile @click="">
+                    <v-list-tile>
                         <v-list-tile-action></v-list-tile-action>
 
                         <v-list-tile-content>
@@ -102,7 +123,7 @@
 
                     <v-divider inset></v-divider>
 
-                    <v-list-tile @click="">
+                    <v-list-tile>
                         <v-list-tile-action>
                             <v-icon color="indigo">mail</v-icon>
                         </v-list-tile-action>
@@ -113,7 +134,7 @@
                         </v-list-tile-content>
                     </v-list-tile>
 
-                    <v-list-tile @click="">
+                    <v-list-tile>
                         <v-list-tile-action></v-list-tile-action>
 
                         <v-list-tile-content>
@@ -162,8 +183,8 @@
             <v-btn icon @click="rightDrawer = !rightDrawer">
                 <v-icon>info</v-icon>
             </v-btn>
-            <v-btn icon>
-                <v-icon>more_vert</v-icon>
+            <v-btn icon @click="logout">
+                <v-icon>exit_to_app</v-icon>
             </v-btn>
         </v-toolbar>
 
@@ -175,6 +196,7 @@
                     <v-container :style="'max-height: ' + getInnerHeight + 'px'">
                         <ul>
                             <li v-for="(item, i) in messages" :key="i" :class="item.userlogin == user ? 'me' : 'him'">
+                                <div style="font-weight:bold">{{ item.username }}</div>
                                 {{item.message}}
                             </li>
                         </ul>
@@ -241,11 +263,11 @@
                 message     : this.msg,
                 isDark      : false,
                 clipped     : true,
-                drawer      : true,
+                drawer      : false,
                 msg         : '',
                 fixed       : false,
                 icon        : 'bubble_chart',
-                items       : [{
+                items2       : [{
                     icon: 'bubble_chart',
                     title: 'Inspire'},
                 ],
@@ -263,7 +285,14 @@
                 msgRules    : [
                     p => !!p || 'Message is required.',
                     p => !(p.length <= 0) || 'Message must be longer than 2 characters.'
-                ]
+                ],
+                tempAvatar: 'account_circle',
+                tempAvatarClass: 'grey lighten-1 white--text',
+                items: [
+                    { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Photos', subtitle: 'Jan 9, 2014' },
+                    { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Recipes', subtitle: 'Jan 17, 2014' },
+                    { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Work', subtitle: 'Jan 28, 2014' }
+                ],
             }
         },
         methods: {
