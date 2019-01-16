@@ -179,9 +179,9 @@
                 let successText = this.autoLogin ? 'Success. Now you will be login in Chat' : 'Success. Please login';
                 this.showToast(successText, 'success');
                 if (this.autoLogin) {
-                    setTimeout(() => this.loginUserAfterRegistration(), 1500);
+                    setTimeout(() => this.loginUserAfterRegistration(), 2000);
                 } else {
-                    setTimeout(() => this.$emit('signin', true), 1500);
+                    setTimeout(() => this.$emit('signin', true), 2000);
                 }
             },
             loginUserAfterRegistration() {

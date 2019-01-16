@@ -299,6 +299,7 @@
             chatLogic(serverData) {
                 if (serverData.type === "newMsg") {
                     this.messages.push(serverData.message);
+                    
                     this.scrollToEnd();
                 } else if (serverData.type === "info") {
                     this.scrollToEnd();
@@ -347,6 +348,7 @@
                     username    : this.user,
                     token       : this.$cookies.get('token')
                 };
+                console.log('Path: ', location.href);
                 let initData = {
                     type : 'inituser',
                     data : JSON.stringify(initUserData)
